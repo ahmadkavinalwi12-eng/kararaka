@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0a0e17">
+<title>Untukmu — 6 Bulan di Bawah Bintang</title>
+<style>
+:root{
+  --bg: #0a0e17;
+  --bg-gradient: linear-gradient(135deg, #0a0e17 0%, #131b2e 50%, #0d1421 100%);
+  --gold: #d4af37;
+  --gold-light: #f3d98b;
+  --blue-glow: #4a6fa5;
+  --text: #e8e6f0;
+  --text-dim: #9aa4b8;
+  --card-bg: rgba(255,255,255,0.03);
+  --card-border: rgba(212,175,55,0.2);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background: var(--bg-gradient);
+  color: var(--text);
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Efek Bintang di Latar Belakang */
+#stars {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background-image: 
+    radial-gradient(1px 1px at 20px 30px, #fff, transparent),
+    radial-gradient(1px 1px at 40px 70px, #fff, transparent),
+    radial-gradient(1.5px 1.5px at 120px 150px, #f3d98b, transparent),
+    radial-gradient(1px 1px at 200px 50px, #fff, transparent),
+    radial-gradient(2px 2px at 350px 200px, #fff, transparent),
+    radial-gradient(1px 1px at 450px 300px, #f3d98b, transparent);
+  background-size: 500px 400px;
+  animation: twinkle 8s infinite alternate;
+}
+@keyframes twinkle { 0% { opacity: 0.5; } 100% { opacity: 1; } }
+
+/* Shooting Star */
+.shooting-star {
+  position: fixed; top: -10px; right: 20%;
+  width: 2px; height: 80px;
+  background: linear-gradient(to bottom, transparent, #fff);
+  transform: rotate(45deg);
+  animation: shoot 6s linear infinite;
+  z-index: 0; opacity: 0;
+  box-shadow: 0 0 10px #fff;
+}
+.shooting-star:nth-child(2) { right: 60%; animation-delay: 3s; }
+@keyframes shoot {
+  0% { transform: translateY(0) translateX(0) rotate(45deg); opacity: 0; }
+  10% { opacity: 1; }
+  30% { transform: translateY(400px) translateX(-400px) rotate(45deg); opacity: 0; }
+  100% { opacity: 0; }
+}
+
+main { position: relative; z-index: 1; }
+
+/* Hero Section */
+.hero {
+  min-height: 100svh; display: flex; flex-direction: column;
+  justify-content: center; align-items: center; text-align: center;
+  padding: 40px 20px;
+}
+.hero-subtitle {
+  font-size: 12px; letter-spacing: 0.5em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 20px; font-weight: 300;
+}
+.hero h1 {
+  font-family: Georgia, serif;
+  font-size: clamp(40px, 10vw, 85px);
+  font-weight: normal; line-height: 1;
+  background: linear-gradient(to right, #fff, var(--gold-light), var(--gold));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  margin-bottom: 20px;
+  filter: drop-shadow(0 0 20px rgba(212,175,55,0.3));
+}
+.hero p {
+  max-width: 600px; font-size: clamp(14px, 2.5vw, 17px);
+  color: var(--text-dim); line-height: 1.9; margin-bottom: 40px;
+}
+
+/* Tombol Elegan */
+.btn-elegant {
+  background: transparent; color: var(--gold-light);
+  border: 1px solid var(--gold);
+  padding: 15px 40px; border-radius: 50px;
+  font-size: 14px; letter-spacing: 0.15em; text-transform: uppercase;
+  cursor: pointer; transition: all 0.4s ease;
+  position: relative; overflow: hidden;
+}
+.btn-elegant:hover {
+  background: var(--gold); color: #0a0e17;
+  box-shadow: 0 0 30px rgba(212,175,55,0.5);
+  transform: translateY(-2px);
+}
+
+/* Layout Umum Section */
+section { padding: 100px 20px; max-width: 1000px; margin: auto; }
+.section-title {
+  text-align: center; font-family: Georgia, serif;
+  font-size: clamp(28px, 5vw, 42px); font-weight: normal;
+  color: var(--gold-light); margin-bottom: 15px;
+}
+.section-line {
+  width: 60px; height: 1px; background: var(--gold);
+  margin: 0 auto 40px;
+}
+.section-desc {
+  text-align: center; color: var(--text-dim);
+  max-width: 600px; margin: -20px auto 50px; line-height: 1.8;
+}
+
+/* Grid Galeri Foto Interaktif */
+.gallery-grid {
+  display: grid; 
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+}
+
+/* Wadah Kartu Foto */
+.photo-card {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--card-border);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+  background: #000;
+  aspect-ratio: 3 / 4; /* Ukuran seragam */
+  cursor: pointer;
+  perspective: 1000px;
+}
+
+/* Bagian Depan (Foto) */
+.card-front {
+  position: absolute;
+  inset: 0;
+  transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+  transform-origin: left center;
+  z-index: 2;
+}
+.card-front img {
+  width: 100%; height: 100%; object-fit: cover;
+  filter: brightness(0.8);
+  transition: filter 0.4s ease;
+}
+.photo-card:hover .card-front img {
+  filter: brightness(1);
+}
+
+/* Teks "Klik Aku" di atas foto */
+.click-hint {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  justify-content: center; align-items: center;
+  background: rgba(10,14,23,0.4);
+  color: var(--gold-light);
+  font-family: Georgia, serif;
+  font-style: italic;
+  letter-spacing: 0.1em;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+.click-hint span {
+  font-size: 30px; margin-bottom: 10px;
+  animation: pulseGold 2s infinite;
+}
+@keyframes pulseGold {
+  0% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(1); opacity: 0.8; }
+}
+
+/* Bagian Belakang (Kata-kata) */
+.card-back {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #131b2e, #0a0e17);
+  border: 1px solid var(--gold);
+  padding: 20px;
+  display: flex; flex-direction: column;
+  justify-content: center; align-items: center;
+  text-align: center;
+  transform: rotateY(-90deg); /* Sembunyi di balik foto */
+  transform-origin: right center;
+  transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+  z-index: 1;
+}
+.card-back h4 {
+  color: var(--gold);
+  font-family: Georgia, serif;
+  font-size: 18px;
+  font-weight: normal;
+  font-style: italic;
+  margin-bottom: 12px;
+}
+.card-back p {
+  color: var(--text);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* EFEK SAAT DIKLIK (Terbuka) */
+.photo-card.opened .card-front {
+  transform: rotateY(-180deg); /* Foto berputar ke kiri */
+}
+.photo-card.opened .click-hint {
+  opacity: 0;
+}
+.photo-card.opened .card-back {
+  transform: rotateY(0deg); /* Kata-kata muncul */
+}
+
+/* Kotak Kejutan */
+.surprise-box {
+  text-align: center;
+  background: linear-gradient(135deg, rgba(212,175,55,0.1), rgba(74,111,165,0.1));
+  border: 1px solid var(--card-border);
+  border-radius: 20px; padding: 50px 20px;
+  position: relative; overflow: hidden;
+}
+#surpriseText {
+  font-family: Georgia, serif;
+  font-size: clamp(16px, 3vw, 20px);
+  color: var(--gold-light);
+  min-height: 80px;
+  display: flex; align-items: center; justify-content: center;
+  margin: 20px 0 30px;
+  transition: opacity 0.5s;
+}
+
+/* Footer */
+footer {
+  text-align: center; padding: 60px 20px;
+  border-top: 1px solid var(--card-border);
+  color: var(--text-dim); font-size: 13px; letter-spacing: 0.1em;
+  position: relative; z-index: 1;
+}
+footer strong {
+  display: block; font-family: Georgia, serif;
+  color: var(--gold-light); font-size: 24px; font-weight: normal;
+  margin-bottom: 10px;
+}
+
+/* Reveal Animation */
+.reveal { opacity: 0; transform: translateY(30px); transition: all 1s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* Responsif */
+@media (max-width: 768px) {
+  .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
+  section { padding: 70px 15px; }
+  .card-back p { font-size: 12px; }
+  .click-hint { font-size: 12px; }
+}
+@media (max-width: 480px) {
+  .gallery-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div id="stars"></div>
+<div class="shooting-star"></div>
+<div class="shooting-star"></div>
+
+<main>
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-subtitle">A Journey Under The Stars</div>
+    <h1>Happy 6<sup style="font-size:0.4em">th</sup><br>Anniversary</h1>
+    <p>Di antara jutaan bintang di langit malam, mas bersyukur semesta mempertemukan kita. Di balik setiap foto ini, ada cerita yang ingin mas sampaikan.</p>
+    <button class="btn-elegant" onclick="document.querySelector('#galeri').scrollIntoView({behavior:'smooth'})">Buka Galeri Kenangan</button>
+  </header>
+
+  <!-- GALERI FOTO INTERAKTIF -->
+  <section id="galeri" class="reveal">
+    <h2 class="section-title">Ketuk & Baca</h2>
+    <div class="section-line"></div>
+    <p class="section-desc">Setiap potret menyimpan kata yang belum terucap. Ketuk fotonya untuk membuka pesannya.</p>
+    
+    <div class="gallery-grid">
+      
+      <!-- FOTO 1 (Selfie Kemeja Putih) -->
+      <div class="photo-card" onclick="this.classList.toggle('opened')">
+        <div class="card-front">
+          <img src="foto1.jpg" alt="Momen 1">
+          <div class="click-hint"><span>🤍</span>Ketuk</div>
+        </div>
+        <div class="card-back">
+          <h4>"Menunggu Waktu"</h4>
+          <p>Flashback: adek nyuruh mas potong rambut. Inget nggak? Waktu itu mas pertama kali ngelanggar adek, setelah potong rambut mas kemana? yapppss mie gacoan wkwkwkwkwk, hari itu juga adek marah besar ke mas.</p>
+        </div>
+      </div>
+      
+      <!-- FOTO 2 (Close-up Hijab Abu) -->
+      <div class="photo-card" onclick="this.classList.toggle('opened')">
+        <div class="card-front">
+          <img src="foto2.jpg" alt="Momen 2">
+          <div class="click-hint"><span>🤍</span>Ketuk</div>
+        </div>
+        <div class="card-back">
+          <h4>"Tatapan yang Menenangkan"</h4>
+          <p>Ada ketenangan di matamu. Sedihku reda setiap kali menatapnya.</p>
+        </div>
+      </div>
+      
+      <!-- FOTO 3 (Hijab Putih Bunga) -->
+      <div class="photo-card" onclick="this.classList.toggle('opened')">
+        <div class="card-front">
+          <img src="foto3.jpg" alt="Momen 3">
+          <div class="click-hint"><span>🤍</span>Ketuk</div>
+        </div>
+        <div class="card-back">
+          <h4>"Lembut & Elegan"</h4>
+          <p>Tak perlu banyak warna. Kesederhanaan adek justru yang paling memikat hati nya mas.</p>
+        </div>
+      </div>
+      
+      <!-- FOTO 4 (Stiker Katak) -->
+      <div class="photo-card" onclick="this.classList.toggle('opened')">
+        <div class="card-front">
+          <img src="foto4.jpg" alt="Momen 4">
+          <div class="click-hint"><span>🤍</span>Ketuk</div>
+        </div>
+        <div class="card-back">
+          <h4>"pertama kali"</h4>
+          <p>jujur ini first time buat mas, ga kepikiran sih kenapa mas seberani itu ke rumah kamu.</p>
+        </div>
+      </div>
+      
+      <!-- FOTO 5 (Genggam Tangan Emas) -->
+      <div class="photo-card" onclick="this.classList.toggle('opened')">
+        <div class="card-front">
+          <img src="foto5.jpg" alt="Momen 5">
+          <div class="click-hint"><span>🤍</span>Ketuk</div>
+        </div>
+        <div class="card-back">
+          <h4>"Genggaman yang Nyata"</h4>
+          <p>pertama kali mas ngerasa genggaman membuat mas berfikir, banyak yang mas pikul bukan sekedar kelembutan tangannya adek, tapi rasa ingin melindungi, apapun itu.</p>
+        </div>
+      </div>
+      
+      <!-- FOTO 6 (Kopi & Karpet Hijau) -->
+      <div class="photo-card" onclick="this.classList.toggle('opened')">
+        <div class="card-front">
+          <img src="foto6.jpg" alt="Momen 6">
+          <div class="click-hint"><span>🤍</span>Ketuk</div>
+        </div>
+        <div class="card-back">
+          <h4>"Ruang & Waktu"</h4>
+          <p>Secangkir kopi, obrolan ringan, dan kamu. namun......  menjadi awal dari kasus terberatnya mas.......</p>
+        </div>
+      </div>
+
+      <!-- FOTO 7 (Hijab Cokelat & Peci) -->
+      <div class="photo-card" onclick="this.classList.toggle('opened')">
+        <div class="card-front">
+          <img src="foto7.jpg" alt="Momen 7">
+          <div class="click-hint"><span>🤍</span>Ketuk</div>
+        </div>
+        <div class="card-back">
+          <h4>"Menatap Masa Depan"</h4>
+          <p>yapppssss dari foto ini mas belajar, bahwa hubungan itu tak harus butuh validasi orang, terkadang hubungan yang hanya diketahui oleh orang orang terdekat, namun itu lah yang menjadi spesial buat mas.</p>
+        </div>
+      </div>
+
+      <!-- FOTO 8 (Gamis Krem Malam Hari) -->
+      <div class="photo-card" onclick="this.classList.toggle('opened')">
+        <div class="card-front">
+          <img src="foto8.jpg" alt="Momen 8">
+          <div class="click-hint"><span>🤍</span>Ketuk</div>
+        </div>
+        <div class="card-back">
+          <h4>"Cantiknya Dirimu"</h4>
+          <p>Di bawah gemerlap lampu malam, adek tetap yang paling bersinar.</p>
+        </div>
+      </div>
+
+      <!-- FOTO 9 (Gelang Couple) -->
+      <div class="photo-card" onclick="this.classList.toggle('opened')">
+        <div class="card-front">
+          <img src="foto9.jpg" alt="Momen 9">
+          <div class="click-hint"><span>🤍</span>Ketuk</div>
+        </div>
+        <div class="card-back">
+          <h4>"Satu Ikat, Satu Rasa"</h4>
+          <p>Gelang ini bukan sekadar perhiasan. Ini janji kecil bahwa kita saling memiliki.</p>
+        </div>
+      </div>
+
+      <!-- FOTO 10 (Selfie Bersandar di Bahu) -->
+      <div class="photo-card" onclick="this.classList.toggle('opened')">
+        <div class="card-front">
+          <img src="foto10.jpg" alt="Momen 10">
+          <div class="click-hint"><span>🤍</span>Ketuk</div>
+        </div>
+        <div class="card-back">
+          <h4>"Rasa Aman"</h4>
+          <p>Di bahumu, mas menemukan tempat paling nyaman untuk beristirahat dari dunia.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SURPRISE -->
+  <section class="reveal">
+    <h2 class="section-title">Pesan Rahasia</h2>
+    <div class="section-line"></div>
+    <div class="surprise-box">
+      <div style="font-size: 30px; margin-bottom: 10px;">✨</div>
+      <p style="color: var(--text-dim); font-size: 14px;">Sentuh tombol di bawah untuk melihat pesan yang kutitipkan untukmu.</p>
+      <div id="surpriseText">Pesan masih tersembunyi...</div>
+      <button class="btn-elegant" id="surpriseBtn">Buka Pesan</button>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <strong>6 Months & Counting</strong>
+    <p>04 . 11 . 2026</p>
+    <p style="margin-top: 20px; opacity: 0.6;">Dibuat dengan penuh rasa syukur.</p>
+  </footer>
+</main>
+
+<script>
+// LOGIKA TOMBOL SURPRISE
+const secretMessages = [
+  "adek bukan hanya menjadi pasangannya  mas, tetapi adek menjadi alasan dibalik kerja kerasnya mas selama ini. ♡",
+  "kamu memang bukan cinta pertama tapi kamu lah pemenang cinta sejatinya mas.",
+  "Semoga kita selalu punya keberanian untuk jujur, saling memahami, dan memperbaiki keadaan bersama.",
+  "Enam bulan sudah kita lewati. Semoga masih banyak tanggal indah yang bisa kita rayakan.",
+  "Satu hal yang ingin selalu kuingat: hubungan ini dijaga oleh dua orang yang sama-sama mau berusaha. ❤️"
+];
+let msgIndex = 0;
+document.getElementById('surpriseBtn').addEventListener('click', function() {
+  const textEl = document.getElementById('surpriseText');
+  textEl.style.opacity = 0;
+  setTimeout(() => {
+    textEl.textContent = secretMessages[msgIndex % secretMessages.length];
+    textEl.style.opacity = 1;
+    msgIndex++;
+  }, 300);
+});
+
+// ANIMASI REVEAL SAAT SCROLL
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.15 });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
